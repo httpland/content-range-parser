@@ -1,14 +1,11 @@
 // Copyright 2023-latest the httpland authors. All rights reserved. MIT license.
 // This module is browser compatible.
 
-export interface ContentLength {
+/** Representation of [`unsatisfied-range`](https://www.rfc-editor.org/rfc/rfc9110.html#section-14.4-2). */
+export interface UnsatisfiedRange {
   /** Representation of [`<unsatisfied-range>`](https://www.rfc-editor.org/rfc/rfc9110.html#section-14.4-2). */
   readonly completeLength: number;
 }
-
-/** Representation of [`unsatisfied-range`](https://www.rfc-editor.org/rfc/rfc9110.html#section-14.4-2). */
-// deno-lint-ignore no-empty-interface
-export interface UnsatisfiedRange extends ContentLength {}
 
 /** Representation of [`range-resp`](https://www.rfc-editor.org/rfc/rfc9110.html#section-14.4-2). */
 export interface RangeResp extends InclRange {

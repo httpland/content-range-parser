@@ -3,7 +3,6 @@
 
 import { isNonNegativeInteger, isNumber } from "./deps.ts";
 import type {
-  ContentLength,
   ContentRange,
   InclRange,
   RangeResp,
@@ -15,6 +14,8 @@ import {
   isRangeUnitFormat,
 } from "./validate.ts";
 import { Char } from "./constants.ts";
+
+export type ContentLength = UnsatisfiedRange;
 
 /** Serialize {@link ContentRange} into string.
  *

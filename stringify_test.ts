@@ -1,4 +1,5 @@
 import {
+  ContentLength,
   stringifyCompleteLength,
   stringifyContentRange,
   stringifyInclRange,
@@ -13,7 +14,6 @@ import {
   it,
 } from "./_dev_deps.ts";
 import {
-  ContentLength,
   ContentRange,
   InclRange,
   RangeResp,

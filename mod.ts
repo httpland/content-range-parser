@@ -3,3 +3,9 @@
 
 export { parseContentLength } from "./parse.ts";
 export { stringifyContentRange } from "./stringify.ts";
+export type {
+  ContentRange,
+  InclRange,
+  RangeResp,
+  UnsatisfiedRange,
+} from "./types.ts";
