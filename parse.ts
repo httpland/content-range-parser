@@ -8,7 +8,7 @@ import type {
   RangeResp,
   UnsatisfiedRange,
 } from "./types.ts";
-import { cause, splitBy } from "./utils.ts";
+import { cause, divideTwo } from "./utils.ts";
 
 const SP = " ";
 
@@ -16,7 +16,7 @@ const SP = " ";
  * @throws {SyntaxError}
  */
 export function parseContentRange(input: string): ContentRange {
-  const result = splitBy(input, SP);
+  const result = divideTwo(input, SP);
   const error = SyntaxError(`invalid <Content-Range> syntax. "${input}"`);
 
   if (!result) throw error;
@@ -55,7 +55,7 @@ export function parseUnsatisfiedRange(input: string): UnsatisfiedRange {
  * @throws {SyntaxError}
  */
 export function parseRangeResp(input: string): RangeResp {
-  const result = splitBy(input, "/");
+  const result = divideTwo(input, "/");
   const error = SyntaxError(`invalid <range-resp> syntax. "${input}"`);
 
   if (!result) throw error;
@@ -74,7 +74,7 @@ export function parseRangeResp(input: string): RangeResp {
  * @throws {SyntaxError}
  */
 export function parseInclRange(input: string): InclRange {
-  const result = splitBy(input, "-");
+  const result = divideTwo(input, "-");
   const error = SyntaxError(`invalid <incl-range> syntax. "${input}"`);
 
   if (!result) throw error;
