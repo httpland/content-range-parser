@@ -1,3 +1,6 @@
+// Copyright 2023-latest the httpland authors. All rights reserved. MIT license.
+// This module is browser compatible.
+
 import { isNumber } from "./deps.ts";
 import type { RangeResp, UnsatisfiedRange } from "./types.ts";
 
