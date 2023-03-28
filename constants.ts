@@ -8,3 +8,15 @@ export const enum Char {
   Hyphen = "-",
   Space = " ",
 }
+
+/** ABNF syntax symbol. */
+export const enum ABNF {
+  FirstPos = "<first-pos>",
+  LastPos = "<last-pos>",
+  CompleteLength = "<complete-length>",
+  ContentRange = "<Content-Range>",
+  UnsatisfiedRange = "<unsatisfied-range>",
+  RangeResp = "<range-resp>",
+  InclRange = "<incl-range>",
+  DIGIT = "<DIGIT>",
+}

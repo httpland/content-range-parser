@@ -9,20 +9,14 @@ import type {
   UnsatisfiedRange,
 } from "./types.ts";
 import { cause, divideTwo } from "./utils.ts";
-import { Char } from "./constants.ts";
-
-const enum Msg {
-  InvalidFirstPos = "invalid <first-pos> syntax.",
-  InvalidLastPos = "invalid <last-pos> syntax.",
-  InvalidContentLength = "invalid <content-length> syntax.",
-}
+import { ABNF, Char } from "./constants.ts";
 
 /** Parses string into {@link ContentRange}.
  * @throws {SyntaxError}
  */
 export function parseContentRange(input: string): ContentRange {
   const result = divideTwo(input, Char.Space);
-  const error = SyntaxError(`invalid <Content-Range> syntax. "${input}"`);
+  const error = SyntaxError(message(ABNF.ContentRange, input));
 
   if (!result) throw error;
 
@@ -49,7 +43,7 @@ function isMaybeUnsatisfiedRangeFormat(
  * @throws {SyntaxError}
  */
 export function parseUnsatisfiedRange(input: string): UnsatisfiedRange {
-  const error = SyntaxError(`invalid <unsatisfied-range> syntax. "${input}"`);
+  const error = SyntaxError(message(ABNF.UnsatisfiedRange, input));
 
   if (!isMaybeUnsatisfiedRangeFormat(input)) throw error;
 
@@ -63,7 +57,7 @@ export function parseUnsatisfiedRange(input: string): UnsatisfiedRange {
  */
 export function parseRangeResp(input: string): RangeResp {
   const result = divideTwo(input, Char.Slash);
-  const error = SyntaxError(`invalid <range-resp> syntax. "${input}"`);
+  const error = SyntaxError(message(ABNF.RangeResp, input));
 
   if (!result) throw error;
 
@@ -82,7 +76,7 @@ export function parseRangeResp(input: string): RangeResp {
  */
 export function parseInclRange(input: string): InclRange {
   const result = divideTwo(input, Char.Hyphen);
-  const error = SyntaxError(`invalid <incl-range> syntax. "${input}"`);
+  const error = SyntaxError(message(ABNF.InclRange, input));
 
   if (!result) throw error;
 
@@ -97,7 +91,7 @@ const ReDigit1OrMore = /^\d+$/;
 
 function parseNonNegativeInteger(input: string): number {
   if (!ReDigit1OrMore.test(input)) {
-    throw SyntaxError(`invalid <DIGIT> syntax. ${input}`);
+    throw SyntaxError(message(ABNF.DIGIT, input));
   }
 
   return Number.parseInt(input);
@@ -107,7 +101,7 @@ export function parseFirstPos(input: string): number {
   try {
     return parseNonNegativeInteger(input);
   } catch {
-    throw SyntaxError(`${Msg.InvalidFirstPos} "${input}"`);
+    throw SyntaxError(message(ABNF.FirstPos, input));
   }
 }
 
@@ -115,7 +109,7 @@ export function parseLastPos(input: string): number {
   try {
     return parseNonNegativeInteger(input);
   } catch {
-    throw SyntaxError(`${Msg.InvalidLastPos} "${input}"`);
+    throw SyntaxError(message(ABNF.LastPos, input));
   }
 }
 
@@ -123,6 +117,10 @@ export function parseContentLength(input: string): number {
   try {
     return parseNonNegativeInteger(input);
   } catch {
-    throw SyntaxError(`${Msg.InvalidContentLength} "${input}"`);
+    throw SyntaxError(message(ABNF.CompleteLength, input));
   }
+}
+
+function message(abnf: ABNF, actual: string): string {
+  return `invalid ${abnf} syntax. "${actual}"`;
 }
