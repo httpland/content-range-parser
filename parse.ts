@@ -9,14 +9,19 @@ import type {
   UnsatisfiedRange,
 } from "./types.ts";
 import { cause, divideTwo } from "./utils.ts";
+import { Char } from "./constants.ts";
 
-const SP = " ";
+const enum Msg {
+  InvalidFirstPos = "invalid <first-pos> syntax.",
+  InvalidLastPos = "invalid <last-pos> syntax.",
+  InvalidContentLength = "invalid <content-length> syntax.",
+}
 
 /** Parses string into {@link ContentRange}.
  * @throws {SyntaxError}
  */
 export function parseContentRange(input: string): ContentRange {
-  const result = divideTwo(input, SP);
+  const result = divideTwo(input, Char.Space);
   const error = SyntaxError(`invalid <Content-Range> syntax. "${input}"`);
 
   if (!result) throw error;
@@ -34,8 +39,10 @@ export function parseContentRange(input: string): ContentRange {
   return { ...rangeLike, rangeUnit };
 }
 
-function isMaybeUnsatisfiedRangeFormat(input: string): input is `*/${string}` {
-  return input.startsWith("*/");
+function isMaybeUnsatisfiedRangeFormat(
+  input: string,
+): input is `${Char.Star}${Char.Slash}${string}` {
+  return input.startsWith(Char.Star + Char.Slash);
 }
 
 /** Parses string into {@link UnsatisfiedRange}.
@@ -55,7 +62,7 @@ export function parseUnsatisfiedRange(input: string): UnsatisfiedRange {
  * @throws {SyntaxError}
  */
 export function parseRangeResp(input: string): RangeResp {
-  const result = divideTwo(input, "/");
+  const result = divideTwo(input, Char.Slash);
   const error = SyntaxError(`invalid <range-resp> syntax. "${input}"`);
 
   if (!result) throw error;
@@ -63,7 +70,7 @@ export function parseRangeResp(input: string): RangeResp {
   const [head, tail] = result;
 
   const inclRange = cause(() => parseInclRange(head), error);
-  const completeLength = tail === "*"
+  const completeLength = tail === Char.Star
     ? undefined
     : cause(() => parseContentLength(tail), error);
 
@@ -74,7 +81,7 @@ export function parseRangeResp(input: string): RangeResp {
  * @throws {SyntaxError}
  */
 export function parseInclRange(input: string): InclRange {
-  const result = divideTwo(input, "-");
+  const result = divideTwo(input, Char.Hyphen);
   const error = SyntaxError(`invalid <incl-range> syntax. "${input}"`);
 
   if (!result) throw error;
@@ -118,10 +125,4 @@ export function parseContentLength(input: string): number {
   } catch {
     throw SyntaxError(`${Msg.InvalidContentLength} "${input}"`);
   }
-}
-
-const enum Msg {
-  InvalidFirstPos = "invalid <first-pos> syntax.",
-  InvalidLastPos = "invalid <last-pos> syntax.",
-  InvalidContentLength = "invalid <content-length> syntax.",
 }

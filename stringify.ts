@@ -14,6 +14,7 @@ import {
   isRangeResp,
   isRangeUnitFormat,
 } from "./validate.ts";
+import { Char } from "./constants.ts";
 
 /** Serialize {@link ContentRange} into string.
  * @throws {TypeError} If the {@link ContentRange} is invalid.
@@ -48,9 +49,9 @@ export function stringifyRangeResp(rangeResp: RangeResp): string {
   const inclRangeStr = stringifyInclRange(inclRange);
   const right = isNumber(completeLength)
     ? stringifyCompleteLength({ completeLength })
-    : "*";
+    : Char.Star;
 
-  return `${inclRangeStr}/${right}`;
+  return inclRangeStr + Char.Slash + right;
 }
 
 /**
@@ -66,7 +67,7 @@ export function stringifyInclRange(inclRange: InclRange): string {
     throw TypeError(`lastPos is not non-negative integer. ${lastPos}`);
   }
 
-  return `${firstPos}-${lastPos}`;
+  return firstPos + Char.Hyphen + lastPos;
 }
 
 /**
@@ -89,5 +90,5 @@ export function stringifyUnsatisfiedRange(
 ): string {
   const completeLengthStr = stringifyCompleteLength(unsatisfiedRange);
 
-  return `*/${completeLengthStr}`;
+  return Char.Star + Char.Slash + completeLengthStr;
 }
