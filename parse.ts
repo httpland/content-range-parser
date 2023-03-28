@@ -1,7 +1,11 @@
 // Copyright 2023-latest the httpland authors. All rights reserved. MIT license.
 // This module is browser compatible.
 
-import { isRangeUnitFormat } from "./validate.ts";
+import {
+  assertValidRangeResp,
+  isRangeResp,
+  isRangeUnitFormat,
+} from "./validate.ts";
 import type {
   ContentRange,
   InclRange,
@@ -10,6 +14,10 @@ import type {
 } from "./types.ts";
 import { cause, divideTwo } from "./utils.ts";
 import { ABNF, Char } from "./constants.ts";
+
+const enum Msg {
+  InvalidSemantics = "invalid semantics exist.",
+}
 
 /** Parses string into {@link ContentRange}.
  *
@@ -36,7 +44,8 @@ import { ABNF, Char } from "./constants.ts";
  * });
  * ```
  *
- * @throws {SyntaxError}
+ * @throws {SyntaxError} If the input is invalid [`<Content-Range>`](https://www.rfc-editor.org/rfc/rfc9110#section-14.4-2) syntax.
+ * @throws {Error} If the input contains invalid semantics.
  */
 export function parseContentRange(input: string): ContentRange {
   const result = divideTwo(input, Char.Space);
@@ -53,6 +62,12 @@ export function parseContentRange(input: string): ContentRange {
     ? parseUnsatisfiedRange
     : parseRangeResp;
   const rangeLike = cause(() => parser(tail), error);
+
+  if (isRangeResp(rangeLike)) {
+    cause(() => {
+      assertValidRangeResp(rangeLike);
+    }, Error(`${Msg.InvalidSemantics} "${input}"`));
+  }
 
   return { ...rangeLike, rangeUnit };
 }

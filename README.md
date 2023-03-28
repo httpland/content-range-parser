@@ -42,14 +42,42 @@ assertEquals(parseContentRange("bytes */1000"), {
 
 ### Throwing error
 
+If input is invalid, the following error occurs:
+
+- [Syntax error](#syntax-error)
+- [Semantic error](#semantic-error)
+
+### Syntax error
+
 Throws `SyntaxError` if the input is invalid
-[`<Content-Range>`](https://www.rfc-editor.org/rfc/rfc9110#section-14.4-2).
+[`<Content-Range>`](https://www.rfc-editor.org/rfc/rfc9110#section-14.4-2)
+syntax.
 
 ```ts
 import { parseContentRange } from "https://deno.land/x/content_range_parser@$VERSION/parse.ts";
 import { assertThrows } from "https://deno.land/std/testing/asserts.ts";
 
 assertThrows(() => parseContentRange("<invalid>"));
+```
+
+### Semantic error
+
+Throw `Error` if the input contains invalid semantics.
+
+Invalid semantics are indicated as follows:
+
+> A Content-Range field value is invalid if it contains a range-resp that has a
+> last-pos value less than its first-pos value, or a complete-length value less
+> than or equal to its last-pos value. The recipient of an invalid Content-Range
+> MUST NOT attempt to recombine the received content with a stored
+> representation.
+
+```ts
+import { parseContentRange } from "https://deno.land/x/content_range_parser@$VERSION/parse.ts";
+import { assertThrows } from "https://deno.land/std/testing/asserts.ts";
+
+assertThrows(() => parseContentRange("bytes 100-0/*"));
+assertThrows(() => parseContentRange("bytes 100-200/0"));
 ```
 
 ## Serialization

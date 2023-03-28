@@ -78,6 +78,20 @@ describe("parseContentRange", () => {
     });
   });
 
+  it("should throw error if the semantics error exist", () => {
+    const table: string[] = [
+      "bytes 1-0/*",
+      "bytes 1-0/1000",
+      "bytes 1-1/000",
+      "bytes 1-2/000",
+      "bytes 0-2/0",
+    ];
+
+    table.forEach((input) => {
+      assertThrows(() => parseContentRange(input));
+    });
+  });
+
   it("should be error message input is invalid <Content-Range>", () => {
     let err;
 
@@ -134,6 +148,22 @@ describe("parseContentRange", () => {
         err,
         SyntaxError,
         `invalid <Content-Range> syntax. "unknown */?"`,
+      );
+    }
+  });
+
+  it("should be error message input is invalid semantics", () => {
+    let err;
+
+    try {
+      parseContentRange(`unknown 1-0/1000`);
+    } catch (e) {
+      err = e;
+    } finally {
+      assertIsError(
+        err,
+        Error,
+        `invalid semantics exist. "unknown 1-0/1000"`,
       );
     }
   });
