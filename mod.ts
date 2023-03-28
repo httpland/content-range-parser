@@ -2,3 +2,4 @@
 // This module is browser compatible.
 
 export { parseContentLength } from "./parse.ts";
+export { stringifyContentRange } from "./stringify.ts";
