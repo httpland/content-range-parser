@@ -17,12 +17,43 @@ import {
 import { Char } from "./constants.ts";
 
 /** Serialize {@link ContentRange} into string.
+ *
+ * @example
+ * ```ts
+ * import { stringifyContentRange } from "https://deno.land/x/content_range_parser@$VERSION/stringify.ts";
+ * import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+ *
+ * assertEquals(
+ *   stringifyContentRange({
+ *     rangeUnit: "bytes",
+ *     firstPos: 0,
+ *     lastPos: 100,
+ *     completeLength: 1000,
+ *   }),
+ *   "bytes 0-100/1000",
+ * );
+ * assertEquals(
+ *   stringifyContentRange({
+ *     rangeUnit: "bytes",
+ *     firstPos: 100,
+ *     lastPos: 200,
+ *     completeLength: undefined,
+ *   }),
+ *   "bytes 100-200/*",
+ * );
+ * assertEquals(
+ *   stringifyContentRange({ rangeUnit: "bytes", completeLength: 1000 }),
+ *   "bytes *\/1000",
+ *   );
+ * ```
+ *
  * @throws {TypeError} If the {@link ContentRange} is invalid.
  */
 export function stringifyContentRange(contentRange: ContentRange): string {
-  if (!isRangeUnitFormat(contentRange.rangeUnit)) {
+  const { rangeUnit } = contentRange;
+  if (!isRangeUnitFormat(rangeUnit)) {
     throw TypeError(
-      `rangeUnit is invalid <range-unit> syntax. "${contentRange.rangeUnit}"`,
+      `rangeUnit is invalid <range-unit> syntax. "${rangeUnit}"`,
     );
   }
 

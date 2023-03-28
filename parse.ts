@@ -12,6 +12,30 @@ import { cause, divideTwo } from "./utils.ts";
 import { ABNF, Char } from "./constants.ts";
 
 /** Parses string into {@link ContentRange}.
+ *
+ * @example
+ * ```ts
+ * import { parseContentRange } from "https://deno.land/x/content_range_parser@$VERSION/parse.ts";
+ * import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+ *
+ * assertEquals(parseContentRange("bytes 0-100/1000"), {
+ *   rangeUnit: "bytes",
+ *   firstPos: 0,
+ *   lastPos: 100,
+ *   completeLength: 1000,
+ * });
+ * assertEquals(parseContentRange("bytes 100-200/*"), {
+ *   rangeUnit: "bytes",
+ *   firstPos: 100,
+ *   lastPos: 200,
+ *   completeLength: undefined,
+ * });
+ * assertEquals(parseETag("bytes *\/1000"), {
+ *   rangeUnit: "bytes",
+ *   completeLength: 1000,
+ * });
+ * ```
+ *
  * @throws {SyntaxError}
  */
 export function parseContentRange(input: string): ContentRange {
