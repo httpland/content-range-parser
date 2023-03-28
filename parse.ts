@@ -30,7 +30,7 @@ import { ABNF, Char } from "./constants.ts";
  *   lastPos: 200,
  *   completeLength: undefined,
  * });
- * assertEquals(parseETag("bytes *\/1000"), {
+ * assertEquals(parseContentRange("bytes *\/1000"), {
  *   rangeUnit: "bytes",
  *   completeLength: 1000,
  * });
