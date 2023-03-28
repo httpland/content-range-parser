@@ -13,6 +13,7 @@ export interface RangeResp extends InclRange {
   readonly completeLength: undefined | number;
 }
 
+/** Representation of [`<incl-range>`](https://www.rfc-editor.org/rfc/rfc9110#section-14.4-2). */
 export interface InclRange {
   /** Representation of [`<first-pos>`](https://www.rfc-editor.org/rfc/rfc9110.html#rule.int-range). */
   readonly firstPos: number;
