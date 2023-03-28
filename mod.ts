@@ -9,3 +9,4 @@ export type {
   RangeResp,
   UnsatisfiedRange,
 } from "./types.ts";
+export { isRangeResp, isUnsatisfiedRange } from "./validate.ts";

@@ -179,6 +179,40 @@ or
 | -------------- | -------- | ----------------------------------------------------------------------------------------------------- |
 | completeLength | `number` | Representation of [`<unsatisfied-range>`](https://www.rfc-editor.org/rfc/rfc9110.html#section-14.4-2) |
 
+## Utilities
+
+It provides utilities.
+
+### isRangeResp
+
+Whether the input is `RangeResp` or not.
+
+```ts
+import {
+  type ContentRange,
+  isRangeResp,
+} from "https://deno.land/x/content_range_parser@$VERSION/mod.ts";
+import { assert } from "https://deno.land/std/testing/asserts.ts";
+
+declare const contentRange: ContentRange;
+assert(isRangeResp(contentRange));
+```
+
+### isUnsatisfiedRange
+
+Whether the input is `UnsatisfiedRange` or not.
+
+```ts
+import {
+  type ContentRange,
+  isUnsatisfiedRange,
+} from "https://deno.land/x/content_range_parser@$VERSION/mod.ts";
+import { assert } from "https://deno.land/std/testing/asserts.ts";
+
+declare const contentRange: ContentRange;
+assert(isUnsatisfiedRange(contentRange));
+```
+
 ## API
 
 All APIs can be found in the

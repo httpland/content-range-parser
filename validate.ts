@@ -31,14 +31,40 @@ export function assertValidRangeResp(rangeResp: RangeResp): asserts rangeResp {
   }
 }
 
-/** Whether the input is {@link RangeResp} or not. */
+/** Whether the input is {@link RangeResp} or not.
+ *
+ * @example
+ * ```ts
+ * import {
+ *   type ContentRange,
+ *   isRangeResp,
+ * } from "https://deno.land/x/content_range_parser@$VERSION/mod.ts";
+ * import { assert } from "https://deno.land/std/testing/asserts.ts";
+ *
+ * declare const contentRange: ContentRange;
+ * assert(isRangeResp(contentRange));
+ * ```
+ */
 export function isRangeResp(
   input: RangeResp | UnsatisfiedRange,
 ): input is RangeResp {
   return "firstPos" in input && "lastPos" in input;
 }
 
-/** Whether the input is {@link UnsatisfiedRange} or not. */
+/** Whether the input is {@link UnsatisfiedRange} or not.
+ *
+ * @example
+ * ```ts
+ * import {
+ *   type ContentRange,
+ *   isUnsatisfiedRange,
+ * } from "https://deno.land/x/content_range_parser@$VERSION/mod.ts";
+ * import { assert } from "https://deno.land/std/testing/asserts.ts";
+ *
+ * declare const contentRange: ContentRange;
+ * assert(isUnsatisfiedRange(contentRange));
+ * ```
+ */
 export function isUnsatisfiedRange(
   input: RangeResp | UnsatisfiedRange,
 ): input is UnsatisfiedRange {
