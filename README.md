@@ -125,6 +125,30 @@ assertThrows(() =>
 );
 ```
 
+then, [semantic errors](#semantic-error) are also checked.
+
+```ts
+import { stringifyContentRange } from "https://deno.land/x/content_range_parser@$VERSION/stringify.ts";
+import { assertThrows } from "https://deno.land/std/testing/asserts.ts";
+
+assertThrows(() =>
+  stringifyContentRange({
+    rangeUnit: "<range-unit>",
+    firstPos: 1,
+    lastPos: 0, // firstPos <= lastPos
+    completeLength: undefined,
+  })
+);
+assertThrows(() =>
+  stringifyContentRange({
+    rangeUnit: "<range-unit>",
+    firstPos: 0,
+    lastPos: 100,
+    completeLength: 0, // lastPos < completeLength
+  })
+);
+```
+
 ## Content Range
 
 `ContentRange` is a structured object for `Content-Range` header.
@@ -154,8 +178,6 @@ or
 | Name           | Type     | Description                                                                                           |
 | -------------- | -------- | ----------------------------------------------------------------------------------------------------- |
 | completeLength | `number` | Representation of [`<unsatisfied-range>`](https://www.rfc-editor.org/rfc/rfc9110.html#section-14.4-2) |
-
-### 
 
 ## API
 
