@@ -20,3 +20,11 @@ export const enum ABNF {
   InclRange = "<incl-range>",
   DIGIT = "<DIGIT>",
 }
+
+/** `ContentRange` field name. */
+export const enum ContentRangeProp {
+  RangeUnit = "rangeUnit",
+  FirstPos = "firstPos",
+  LastPos = "lastPos",
+  CompleteLength = "completeLength",
+}

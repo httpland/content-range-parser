@@ -13,7 +13,7 @@ import {
   isRangeResp,
   isRangeUnitFormat,
 } from "./validate.ts";
-import { Char } from "./constants.ts";
+import { Char, ContentRangeProp } from "./constants.ts";
 
 export type ContentLength = UnsatisfiedRange;
 
@@ -54,7 +54,7 @@ export function stringifyContentRange(contentRange: ContentRange): string {
   const { rangeUnit } = contentRange;
   if (!isRangeUnitFormat(rangeUnit)) {
     throw TypeError(
-      `rangeUnit is invalid <range-unit> syntax. "${rangeUnit}"`,
+      `${ContentRangeProp.RangeUnit} is invalid <range-unit> syntax. "${rangeUnit}"`,
     );
   }
 
@@ -92,11 +92,11 @@ export function stringifyRangeResp(rangeResp: RangeResp): string {
 export function stringifyInclRange(inclRange: InclRange): string {
   const { firstPos, lastPos } = inclRange;
   if (!isNonNegativeInteger(firstPos)) {
-    throw TypeError(`firstPos is not non-negative integer. ${firstPos}`);
+    throw TypeError(message(ContentRangeProp.FirstPos, firstPos));
   }
 
   if (!isNonNegativeInteger(lastPos)) {
-    throw TypeError(`lastPos is not non-negative integer. ${lastPos}`);
+    throw TypeError(message(ContentRangeProp.LastPos, lastPos));
   }
 
   return firstPos + Char.Hyphen + lastPos;
@@ -109,9 +109,7 @@ export function stringifyCompleteLength(input: ContentLength): string {
   const { completeLength } = input;
 
   if (!isNonNegativeInteger(completeLength)) {
-    throw TypeError(
-      `completeLength is not non-negative integer. ${completeLength}`,
-    );
+    throw TypeError(message(ContentRangeProp.CompleteLength, completeLength));
   }
 
   return completeLength.toString();
@@ -123,4 +121,8 @@ export function stringifyUnsatisfiedRange(
   const completeLengthStr = stringifyCompleteLength(unsatisfiedRange);
 
   return Char.Star + Char.Slash + completeLengthStr;
+}
+
+function message(prop: ContentRangeProp, actual: number): string {
+  return `${prop} is not non-negative integer. ${actual}`;
 }
